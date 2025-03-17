@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- vamos aqui definir quais os recursos que queremos utilizar
+         na app -->
+    <!-- o ACCESS_FINE_LOCATION retorna uma localização mais precisa,
+         mas consome mais energia ao telemóvel
+         o ACCESS_COARSE_LOCATION devolve a última localização conhecida -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
