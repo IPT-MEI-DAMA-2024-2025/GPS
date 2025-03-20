@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     // a opção 'lateinit' indica que a variável será instanciada mais tarde
     private lateinit var locationManager: LocationManager
     private lateinit var tvGpsLocation: TextView
-    private val locationPermissionCode=2
+    private val locationPermissionCode = 2
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,15 +38,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
         findViewById<Button>(R.id.btGPS).setOnClickListener {
             getLocation()
         }
-
     }
 
     /**
-     * obtém a localização (coordenadas GPS) do telemóvel
+     * avalia se se pode pedir a localização do GPS e se autorizado
+     * requer a localização
      */
     private fun getLocation() {
-        // Instanciar a variável 'locationManager' definina no início da classe
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         if ((ContextCompat.checkSelfPermission(
                 this,
@@ -57,12 +55,33 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                 locationPermissionCode
             )
+        } else {
+            readLocation()
         }
+    }
+
+    /**
+     * obtém a localização (coordenadas GPS) do telemóvel
+     */
+    private fun readLocation() {
+        // Instanciar a variável 'locationManager' definida no início da classe
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
         /*  Inicia o GPS, que vai autilizar a posição de 5 em 5 segundos,
-            se a nova localização estiver pelo menos a 5 metros da última
-            localização  */
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-            5000, 5f, this)
+                se a nova localização estiver pelo menos a 5 metros da última
+                localização  */
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                5000,  // Atualizar a cada 5 segundos
+                5f,   // Se mover pelo menos 5 metros
+                this
+            )
+        }
     }
 
     /**
@@ -70,8 +89,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
      */
     override fun onLocationChanged(location: Location) {
         tvGpsLocation = findViewById(R.id.txtGPS)
-        tvGpsLocation.text =
-            "Latitude: ${location.latitude} , Longitude: ${location.longitude}"
+        tvGpsLocation.text = "Latitude: ${location.latitude} ,\nLongitude: ${location.longitude}"
     }
 
     /**
@@ -85,16 +103,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == locationPermissionCode) {
             if (grantResults.isNotEmpty() &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Uso do GPS permitido", Toast.LENGTH_SHORT)
-                    .show()
+                grantResults[0] == PackageManager.PERMISSION_GRANTED
+            ) {
+                Toast.makeText(this, "Uso do GPS permitido", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Uso do GPS negado", Toast.LENGTH_LONG)
-                    .show()
+                Toast.makeText(this, "Uso do GPS negado", Toast.LENGTH_LONG).show()
             }
         }
     }
-
-
 
 }
