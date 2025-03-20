@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
      */
     override fun onLocationChanged(location: Location) {
         tvGpsLocation = findViewById(R.id.txtGPS)
-        tvGpsLocation.text = "${getString(R.string.latitude)}: ${location.latitude} ,\n${getString(R.string.longitude)}: ${location.longitude}"
+        tvGpsLocation.text = getString(R.string.latitude_longitude, location.latitude.toString() , location.longitude.toString())
     }
 
     /**

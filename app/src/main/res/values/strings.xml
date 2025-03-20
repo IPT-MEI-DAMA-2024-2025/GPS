@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">GPS</string>
     <string name="txt_botao">Obter coordenadas GPS</string>
-    <string name="latitude">Latitude</string>
-    <string name="longitude">Longitude</string>
+    <string name="latitude_longitude">Latitude: %1$s,\nLongitude: %2$s</string>
+    <!-- parâmetros nas strings
+             %s ==> strings
+             %d ==> número inteiro
+             %f ==> número com parte decimal
+     -->
 </resources>
